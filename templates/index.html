@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Author Chat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- 1단계: 언어 선택 -->
+  <div id="step1">
+    <h1>Author Chat</h1>
+    <p>Select your language</p>
+
+    <div class="form-group">
+      <label>Language</label>
+      <div class="btn-group" id="lang-group">
+        <button class="select-btn" onclick="selectLang(this, 'English')">English</button>
+        <button class="select-btn" onclick="selectLang(this, '한국어')">한국어</button>
+      </div>
+    </div>
+
+    <button class="next-btn" onclick="goToStep2()">Next</button>
+  </div>
+
+<!-- 2단계: 사용자 정보 입력 -->
+  <div id="step2" class="hidden">
+    <h1>Author Chat</h1>
+    <p>사용자 정보를 입력해주세요</p>
+
+    <div class="form-group">
+      <label for="username">이름</label>
+      <input type="text" id="username" placeholder="이름을 입력하세요">
+    </div>
+
+    <div class="form-group">
+      <label class="gender-label">성별</label>
+      <div class="btn-group" id="gender-group">
+        <button class="select-btn">남성</button>
+        <button class="select-btn">여성</button>
+        <button class="select-btn">기타</button>
+      </div>
+    </div>
+
+    <button class="next-btn" onclick="goToStep3()">다음</button>
+  </div>
+
+  <!-- 3단계: 작가 선택 -->
+  <div id="step3" class="hidden">
+    <h1>작가 선택</h1>
+    <p>대화할 작가를 선택해주세요</p>
+
+    <div class="author-list">
+      <div class="author-card" onclick="selectAuthor(this)">
+        <div class="author-name">William Shakespeare</div>
+        <div class="author-info">1564 – 1616 · 극작가, 시인</div>
+        <div class="author-works">햄릿, 맥베스, 로미오와 줄리엣</div>
+      </div>
+    </div>
+
+    <button class="next-btn" onclick="goToChat()">대화 시작</button>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
+  <!-- 4단계: 채팅 -->
+  <div id="step4" class="hidden">
+    <div id="chat-header">
+      <div id="chat-header-top">
+        <div id="chat-author-info-wrap">
+          <div id="author-avatar">
+            <img src="{{ url_for('static', filename='shakespeare.jpg') }}" alt="Shakespeare">
+          </div>
+          <div>
+            <div id="chat-author-name">William Shakespeare</div>
+            <div id="chat-author-info">1564 – 1616 · Playwright, Poet</div>
+          </div>
+        </div>
+        <div id="chat-header-btns">
+          <div class="btn-group" id="chat-lang-group">
+            <button class="select-btn" id="lang-en-btn" onclick="changeLang('English')">EN</button>
+            <button class="select-btn" id="lang-ko-btn" onclick="changeLang('한국어')">KO</button>
+          </div>
+          <button id="home-btn" onclick="goToHome()">Home</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-layout">
+      <div id="author-side">
+        <img src="{{ url_for('static', filename='shakespeare.jpg') }}" alt="Shakespeare">
+        <div id="author-side-name">William Shakespeare</div>
+        <div id="author-side-info">1564 – 1616</div>
+      </div>
+
+      <div id="chat-main">
+        <div id="chat-box"></div>
+        <div id="input-area">
+          <input type="text" id="user-input" placeholder="Message Shakespeare...">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div id="chat-box"></div>
+
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Message Shakespeare...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</body>
+</html>
