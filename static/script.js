@@ -1,6 +1,7 @@
 let selectedLang = '';
 let selectedGender = '';
 let userName = '';
+let isFirstMessage = true;
 
 const text = {
   'English': {
@@ -121,7 +122,7 @@ function goToChat() {
     ? '천 번이라도 좋은 아침이오! 반갑소이다!'
     : 'A thousand times good morrow!';
   addMessage(greeting, 'author');
-}  // ← 이 중괄호가 빠져있었어요
+}
 
 function addMessage(msg, role) {
   const box = document.getElementById('chat-box');
@@ -153,17 +154,19 @@ async function sendMessage() {
       message: message,
       name: userName,
       gender: selectedGender,
-      lang: selectedLang
+      lang: selectedLang,
+      isFirst: isFirstMessage
     })
   });
 
   loadingDiv.remove();
-
   const data = await response.json();
   addMessage(data.reply, 'author');
+  isFirstMessage = false;
 }
 
 function goToHome() {
+  isFirstMessage = true;
   selectedLang = '';
   selectedGender = '';
   userName = '';

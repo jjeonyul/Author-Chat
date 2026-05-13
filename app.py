@@ -67,12 +67,15 @@ def chat():
     user_gender = data.get('gender', '')
     user_lang = data.get('lang', 'English')
 
+    is_first = data.get('isFirst', False)
+    name_instruction = f"Address the user by their name ({user_name}) warmly in this response." if is_first else "Do NOT use the user's name in this response."
+
     user_context = f"""
 === USER INFO ===
 - Name: {user_name}
 - Gender: {user_gender}
 - Selected language: {user_lang}
-- You already greeted the user by name at the start. Do NOT use their name again in any response.
+- {name_instruction}
 """
 
     response = client.messages.create(
