@@ -72,7 +72,7 @@ def chat():
 - Name: {user_name}
 - Gender: {user_gender}
 - Selected language: {user_lang}
-- Address the user by their name only once at the beginning of the conversation, not repeatedly.
+- You already greeted the user by name at the start. Do NOT use their name again in any response.
 """
 
     response = client.messages.create(
