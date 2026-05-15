@@ -2,6 +2,7 @@ let selectedLang = '';
 let selectedGender = '';
 let userName = '';
 let isFirstMessage = true;
+let chatHistory = [];
 
 const text = {
   'English': {
@@ -141,6 +142,9 @@ async function sendMessage() {
   input.value = '';
   addMessage(message, 'user');
 
+  // 대화 기록에 추가
+  chatHistory.push({ role: 'user', content: message });
+
   const loadingDiv = document.createElement('div');
   loadingDiv.className = 'message author loading';
   loadingDiv.innerHTML = '<span></span><span></span><span></span>';
@@ -155,7 +159,8 @@ async function sendMessage() {
       name: userName,
       gender: selectedGender,
       lang: selectedLang,
-      isFirst: isFirstMessage
+      isFirst: isFirstMessage,
+      history: chatHistory  // 추가
     })
   });
 
@@ -163,6 +168,9 @@ async function sendMessage() {
   const data = await response.json();
   addMessage(data.reply, 'author');
   isFirstMessage = false;
+
+  // 셰익스피어 답변도 기록에 추가
+  chatHistory.push({ role: 'assistant', content: data.reply });
 }
 
 function goToHome() {
@@ -170,6 +178,7 @@ function goToHome() {
   selectedLang = '';
   selectedGender = '';
   userName = '';
+  chatHistory = [];  // 추가
 
   document.getElementById('chat-box').innerHTML = '';
   document.getElementById('step4').classList.add('hidden');

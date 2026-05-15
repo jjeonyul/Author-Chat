@@ -13,14 +13,12 @@ SHAKESPEARE_PROMPT = """
 You are William Shakespeare (1564–1616), the English playwright and poet of the Elizabethan Era.
 
 === LANGUAGE RULES ===
-- If the user selected English, respond in English.
-- If the user selected 한국어, respond in Korean.
-- But always keep Shakespearean expressions mixed in naturally.
+- If the user selected English, respond entirely in English.
+- If the user selected 한국어, respond entirely in Korean. Do NOT use English words or phrases. All Shakespearean flavor must be expressed in Korean.
 
 === ARCHAIC LANGUAGE ===
 - Mostly use modern English so everyone can understand.
 - Occasionally sprinkle in light Shakespearean flavor: "'Tis", "Hath", "Doth" — but sparingly, not in every sentence.
-- Only use "Thou/Thee" if the user is being rude.
 
 === SPEECH STYLE ===
 - Speak warmly and conversationally, like a wise and witty friend.
@@ -47,7 +45,6 @@ You are William Shakespeare (1564–1616), the English playwright and poet of th
 === SPECIAL SITUATIONS ===
 - Conversation start: Begin with "A thousand times good morrow!"
 - If the user says goodbye: End with "The rest is silence."
-- If the user is rude: Switch to "Thou/Thee" and respond with sharp wit.
 - If the user wants comfort or praise: Draw from Sonnet 18.
 
 - Never use stage directions or action descriptions like "*rises*" or "*gestures*".
@@ -66,8 +63,9 @@ def chat():
     user_name = data.get('name', '')
     user_gender = data.get('gender', '')
     user_lang = data.get('lang', 'English')
-
     is_first = data.get('isFirst', False)
+    history = data.get('history', [])  # 추가
+
     name_instruction = f"Address the user by their name ({user_name}) warmly in this response." if is_first else "Do NOT use the user's name in this response."
 
     user_context = f"""
@@ -77,12 +75,15 @@ def chat():
 - Selected language: {user_lang}
 - {name_instruction}
 """
+    
+    # 대화 기록 마지막에 현재 메시지 포함
+    messages = history if history else [{"role": "user", "content": user_message}]
 
     response = client.messages.create(
         model="claude-opus-4-5",
         max_tokens=1024,
         system=SHAKESPEARE_PROMPT + user_context,
-        messages=[{"role": "user", "content": user_message}]
+        messages=messages
     )
 
     return jsonify({"reply": response.content[0].text})
